@@ -1,0 +1,45 @@
+{
+    "toolchains": {
+        "system": {
+            "root": "/usr",
+            "tools": {
+                "AS": "bin/as",
+                "CC": "bin/clang",
+                "CXX": "bin/clang++",
+                "LD": "bin/ld"
+            }
+        }
+    },
+    "targets": {
+        "${projectDirName}": {
+            "toolchain": "system",
+            "targetName": "${projectDirName}.elf",
+            "sourceRoot": "${workspaceRoot}",
+            "configurations": {
+                "_default": {
+                    "includePaths": [],
+                    "ignoreSources": [],
+                    "defines": [],
+                    "flags": {
+                        "_default": [],
+                        "CC": [ "${inherit:_default}" ],
+                        "CXX": [ "${inherit:CC}" ],
+                        "AS": [ "${inherit:_default}" ],
+                        "LD": []
+                    }
+                },
+                "Debug": {
+                    "inherit": "_default",
+                    "targetDir": "Build/Debug",
+                    "defines": [],
+                    "flags": {}
+                },
+                "Release": {
+                    "inherit": "_default",
+                    "targetDir": "Build/Release",
+                    "flags": {}
+                }
+            }
+        }
+    }
+}
