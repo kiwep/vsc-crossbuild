@@ -4,7 +4,15 @@
     "description": "C/C++ Build System for Embedded Development",
     "version": "0.1.0",
     "publisher": "kiwep",
-    "private": true,
+    "preview": true,
+    "icon": "vsc-crossbuild.png",
+    "author": {
+        "name": "Peter Kovacs",
+        "email": "http://elasticwings.com"
+    },
+    "repository": {
+        "url": ""
+    },
     "engines": {
         "vscode": "^1.14.0"
     },
