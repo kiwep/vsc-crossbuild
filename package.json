@@ -89,6 +89,16 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Automatically generate and maintain c_cpp_properties.json"
+                },
+                "crossbuild.nodePath": {
+                    "type": "string",
+                    "default": "node",
+                    "description": "Path to Node.js binary"
+                },
+                "crossbuild.ninjaPath": {
+                    "type": "string",
+                    "default": "ninja",
+                    "description": "Path to Ninja binary"
                 }
             }
         },

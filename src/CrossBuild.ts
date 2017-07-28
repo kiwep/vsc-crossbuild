@@ -105,16 +105,19 @@ export class CrossBuild implements vscode.Disposable {
 
     if (this.isInitialized && this.buildConfig.getTargetNames().length > 0) {
 
+      const nodePath = await vscode.workspace.getConfiguration('crossbuild').get<string>('nodePath');
+      const ninjaPath = await vscode.workspace.getConfiguration('crossbuild').get<string>('ninjaPath');
+
       const buildTaksKind: IUserTaskDefinition = { type: taskType, command: 'build' }
       const buildTask = new vscode.Task(buildTaksKind, 'Build', 'CrossBuild',
-        new vscode.ShellExecution(`node ${buildScriptPath} --tcfpath ${this.tcfFilePath}`), '$gcc');
+        new vscode.ShellExecution(`${nodePath} ${buildScriptPath} --ninja ${ninjaPath} --tcfpath ${this.tcfFilePath}`), '$gcc');
       buildTask.group = vscode.TaskGroup.Build;
       buildTask.presentationOptions = { echo: false };
       tasks.push(buildTask);
 
       const cleanTaksKind: IUserTaskDefinition = { type: taskType, command: 'clean' }
       const cleanTask = new vscode.Task(cleanTaksKind, 'Clean', 'CrossBuild',
-        new vscode.ShellExecution(`node ${buildScriptPath} --tcfpath ${this.tcfFilePath} --clean`), []);
+        new vscode.ShellExecution(`${nodePath} ${buildScriptPath} --tcfpath ${this.tcfFilePath} --clean`), []);
       cleanTask.group = vscode.TaskGroup.Clean;
       cleanTask.presentationOptions = { echo: false };
       tasks.push(cleanTask);

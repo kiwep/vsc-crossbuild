@@ -19,6 +19,7 @@ program
   .option('-c, --config <configuration>', 'Configuration name (required)')
   .option('-tcf, --tcfpath [path]', 'Target-configuration file path (provides target and config)')
   .option('-f, --file [path]', 'Configuration file path', path.join('.vscode', 'crossbuild.json'))
+  .option('-n, --ninja [path]', 'The ninja executable path (it not on the shells PATH)', 'ninja')
   .option('--clean', 'Clean instead of build')
   .parse(process.argv);
 
@@ -168,7 +169,7 @@ async function run() {
   outStream.end();
 
   console.log(`Build file: ${outFilePath}`);
-  const code = await helper.execCommand('ninja', ['-f', outFilePath], { stdio: 'inherit' });
+  const code = await helper.execCommand(program.ninja, ['-f', outFilePath], { stdio: 'inherit' });
   if (code !== 0) {
     process.exit(code);
   }

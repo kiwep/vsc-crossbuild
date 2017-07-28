@@ -184,6 +184,8 @@ This extension contributes the following settings:
 
 * `crossbuild.enable`: enable/disable the extension; default is disable so you have to explicitly enable it in the user/workspace setting
 * `crossbuild.generateVsCCppProperties`: enable/disable the automatic generation of the `c_cpp_properties.json` file for `cpptools`
+* `crossbuild.nodePath`: Path to Node.js binary if the `node` command is not found on your $PATH
+* `crossbuild.ninjaPath`: Path to Ninja binary if the `ninja` command is not found on your $PATH
 
 ## Known Issues
 
@@ -191,6 +193,12 @@ This extension contributes the following settings:
 * No error messages on misconfigured config file
 
 ## Release Notes
+
+### 0.1.1
+
+Added the following configuration options:
+* nodePath
+* ninjaPath
 
 ### 0.1.0
 
