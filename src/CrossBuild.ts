@@ -171,12 +171,15 @@ export class CrossBuild implements vscode.Disposable {
             intelliSenseMode: process.platform === 'win32' ? 'mscv-x64' : 'clang-x64',
             name: 'Auto',
             includePath,
-            defines
+            defines,
+            browse: { path: includePath }
           }
         ]
       };
 
-      const dataStr = JSON.stringify(data, null, 4) + '\n';
+      const spaces = await vscode.workspace.getConfiguration('editor').get<number>('tabSize');
+
+      const dataStr = JSON.stringify(data, null, spaces || 4) + '\n';
       await helper.writeFileContent(filePath, dataStr);
     }
   }
