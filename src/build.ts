@@ -44,6 +44,19 @@ function ninjaEscape(str: string): string {
   return str.replace(ninjaEscapeRegexp, function(m, m0) { return '$' + m0; });
 }
 
+function closeFlushStream(stream: fs.WriteStream): Promise<void> {
+  return new Promise((resolve, reject) => {
+    stream.once('open', fd => {
+      stream.once('close', _ => {
+        fs.fsync(fd, _ => {
+          resolve();
+        });
+      });
+      stream.end();
+    });
+  });
+}
+
 async function run() {
   if (!fs.existsSync(program.file)) {
     console.error(`Error: Configuration file "${program.file}" not found!`);
@@ -166,8 +179,10 @@ async function run() {
   outStream.write(`build ${productName}: phony ${productFile}\n`);
   outStream.write(`default ${productName}\n`);
 
-  outStream.end();
+  // outStream.end();
+  await closeFlushStream(outStream); //, outFs);
 
+  console.log('Working directory:', process.cwd());
   console.log(`Build file: ${outFilePath}`);
   const code = await helper.execCommand(program.ninja, ['-f', outFilePath], { stdio: 'inherit' });
   if (code !== 0) {
