@@ -194,6 +194,11 @@ This extension contributes the following settings:
 
 ## Release Notes
 
+### 0.1.4
+
+Only rewrite c_cpp_properties.json if the file content is different
+Added new config option `crossbuild.vsCCppExtraDefines`: an array of extra defines to add to the generated c_cpp_properties file. This is useful if clang needs additional  defines present by default in your toolchains compiler (`__GNUC__` for example)
+
 ### 0.1.3
 
 Fixed cpptools intergation: c_cpp_properties.json now includes the browse.path section

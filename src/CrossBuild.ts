@@ -128,7 +128,10 @@ export class CrossBuild implements vscode.Disposable {
   }
 
   async setTarget(targetName?: string, configName?: string): Promise<void> {
-    if (targetName === this.selectedTarget && configName === this.selectedConfig) return;
+    if (targetName === this.selectedTarget && configName === this.selectedConfig) {
+      await this.generateVsCCppProperties();
+      return;
+    }
 
     this.selectedTarget = targetName;
     this.selectedConfig = configName;
@@ -146,40 +149,48 @@ export class CrossBuild implements vscode.Disposable {
 
   async generateVsCCppProperties(): Promise<void> {
     const generateVsCCpp = await vscode.workspace.getConfiguration('crossbuild').get<boolean>('generateVsCCppProperties');
-    if (generateVsCCpp) {
-      const filePath = path.join(path.dirname(this.buildConfig.configFilePath), 'c_cpp_properties.json');
-      let includePath: string[] = [];
-      let defines: string[] = [];
+    if (!generateVsCCpp)  return;
 
-      if (this.selectedTarget && this.selectedConfig) {
-        const target = this.buildConfig.getTarget(this.selectedTarget);
-        const targetConfig = this.buildConfig.getConfigurationForTarget(this.selectedTarget, this.selectedConfig);
-        if (targetConfig) {
-          includePath = (targetConfig.includePaths || []).map(item => {
-            if (!path.isAbsolute(item)) item = path.join(target.sourceRoot || '', item);
-            item = path.resolve(item).replace(this.workspaceRoot, '${workspaceRoot}');
-            return item;
-          });
-          defines = targetConfig.defines || [];
-        }
+    const vsCCppDefines = await vscode.workspace.getConfiguration('crossbuild').get<Array<string>>('vsCCppExtraDefines');
+    const spaces = await vscode.workspace.getConfiguration('editor').get<number>('tabSize');
+
+    const filePath = path.join(path.dirname(this.buildConfig.configFilePath), 'c_cpp_properties.json');
+    let includePath: string[] = [];
+    let defines: string[] = [];
+
+    if (this.selectedTarget && this.selectedConfig) {
+      const target = this.buildConfig.getTarget(this.selectedTarget);
+      const targetConfig = this.buildConfig.getConfigurationForTarget(this.selectedTarget, this.selectedConfig);
+      if (targetConfig) {
+        includePath = (targetConfig.includePaths || []).map(item => {
+          if (!path.isAbsolute(item)) item = path.join(target.sourceRoot || '', item);
+          item = path.resolve(item).replace(this.workspaceRoot, '${workspaceRoot}');
+          return item;
+        });
+        defines = targetConfig.defines || [];
       }
+    }
 
-      const data = {
-        version: 2,
-        configurations: [
-          {
-            intelliSenseMode: process.platform === 'win32' ? 'mscv-x64' : 'clang-x64',
-            name: 'Auto',
-            includePath,
-            defines,
-            browse: { path: includePath }
-          }
-        ]
-      };
+    if (Array.isArray(vsCCppDefines) && vsCCppDefines.length > 0) {
+      defines = vsCCppDefines.concat(defines);
+    }
 
-      const spaces = await vscode.workspace.getConfiguration('editor').get<number>('tabSize');
+    const data = {
+      version: 2,
+      configurations: [
+        {
+          intelliSenseMode: process.platform === 'win32' ? 'mscv-x64' : 'clang-x64',
+          name: 'Auto',
+          includePath,
+          defines,
+          browse: { path: includePath }
+        }
+      ]
+    };
 
-      const dataStr = JSON.stringify(data, null, spaces || 4) + '\n';
+    const dataStr = JSON.stringify(data, null, spaces || 4) + '\n';
+    const currentStr = await helper.readFileContent(filePath);
+    if (currentStr !== dataStr) {
       await helper.writeFileContent(filePath, dataStr);
     }
   }
@@ -212,8 +223,10 @@ export class CrossBuild implements vscode.Disposable {
         }
       }
 
-      await this.setTarget();
+      return await this.setTarget();
     }
+
+    this.generateVsCCppProperties();
   }
 
   editConfigCommand(): void {
