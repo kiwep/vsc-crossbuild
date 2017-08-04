@@ -194,9 +194,13 @@ This extension contributes the following settings:
 
 ## Release Notes
 
+### 0.1.6
+
+Added the `outFile` option to `postBuildTasks`. If specified the output of the task will be redirected to `outFile`.
+
 ### 0.1.5
 
-Fixed an issue where a missing c_cpp_properties.json file was not generated.
+Fixed an issue where a missing `c_cpp_properties.json` file was not generated.
 
 ### 0.1.4
 

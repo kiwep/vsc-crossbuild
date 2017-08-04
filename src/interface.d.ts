@@ -24,6 +24,7 @@ export namespace IBuildConfig
     tool?: string;
     command?: string;
     args?: string[];
+    outFile?: string;
   }
 
   interface TargetConfiguration {

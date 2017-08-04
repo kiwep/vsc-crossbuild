@@ -201,7 +201,16 @@ async function run() {
       else cmd = task.command;
 
       if (cmd) {
-        await helper.execCommand(cmd, task.args ||  [], { stdio: 'inherit' });
+        let stdio: string | any[] = 'inherit';
+        let fd = -1;
+        if (typeof task.outFile === 'string') {
+          fd = fs.openSync(task.outFile, 'w');
+          stdio = [ process.stdin, fd, fd ];
+        }
+        await helper.execCommand(cmd, task.args ||  [], { stdio });
+        if (fd > -1) {
+          fs.closeSync(fd);
+        }
       }
     }
   }
