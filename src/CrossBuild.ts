@@ -189,7 +189,11 @@ export class CrossBuild implements vscode.Disposable {
     };
 
     const dataStr = JSON.stringify(data, null, spaces || 4) + '\n';
-    const currentStr = await helper.readFileContent(filePath);
+    let currentStr = '';
+    try {
+      currentStr = await helper.readFileContent(filePath);
+    }
+    catch(e) {}
     if (currentStr !== dataStr) {
       await helper.writeFileContent(filePath, dataStr);
     }

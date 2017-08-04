@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.5]
+* Fixed: missing c_cpp_properties.json file was not generated
+
 ## [0.1.4]
 * Fixed: there was an issue in cpptools at startup caused by crossbuild rewriting the c_cpp_properties file while it was unchanged
 * Added: `crossbuild.vsCCppExtraDefines` config option

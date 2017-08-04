@@ -2,7 +2,7 @@
     "name": "vsc-crossbuild",
     "displayName": "CrossBuild",
     "description": "C/C++ Build System for Embedded Development",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "publisher": "kiwep",
     "preview": true,
     "icon": "vsc-crossbuild.png",
