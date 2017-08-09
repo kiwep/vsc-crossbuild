@@ -194,6 +194,9 @@ This extension contributes the following settings:
 
 ## Release Notes
 
+### 0.1.7
+* Build script now follows symlinks while building file list
+
 ### 0.1.6
 
 Added the `outFile` option to `postBuildTasks`. If specified the output of the task will be redirected to `outFile`.

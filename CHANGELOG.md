@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.7]
+* Fixed: build script now follows symlinks while building file list
+
 ## [0.1.6]
 * Added: `outFile` option to `postBuildTasks`. If specified the output of the task will be redirected to `outFile`.
 

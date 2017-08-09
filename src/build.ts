@@ -156,7 +156,7 @@ async function run() {
   const build: string[] = [];
   const obj: string[] = [];
 
-  glob.sync(sourceGlob, { ignore: ignoreGlobs }).forEach((srcpath: string) => {
+  glob.sync(sourceGlob, { ignore: ignoreGlobs, follow: true }).forEach((srcpath: string) => {
     if (srcpath.indexOf(rootPath) === 0) {
       srcpath = srcpath.substr(rootPathStrLen);
     }
