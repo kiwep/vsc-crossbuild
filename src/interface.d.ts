@@ -34,6 +34,7 @@ export namespace IBuildConfig
     ignoreSources?: string[];
     defines?: string[];
     flags?: TargetFlagList;
+    extraLinkerFlags?: string[];
     postBuildTasks?: TargetPostBuildTask[];
   }
 

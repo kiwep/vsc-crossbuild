@@ -2,13 +2,13 @@
     "name": "vsc-crossbuild",
     "displayName": "CrossBuild",
     "description": "C/C++ Build System for Embedded Development",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "publisher": "kiwep",
     "preview": true,
     "icon": "vsc-crossbuild.png",
     "author": {
         "name": "Peter Kovacs",
-        "email": "http://elasticwings.com"
+        "url": "http://elasticwings.com"
     },
     "repository": {
         "url": "https://github.com/kwep/vsc-crossbuild.git"

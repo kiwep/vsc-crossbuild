@@ -86,6 +86,9 @@ An example configuration file looks like the following:
                             "-TBoard/STM32F070RBTx_FLASH.ld"
                         ]
                     },
+                    "extraLinkerFlags": [
+                        "-llibopencm3"
+                    ],
                     "postBuildTasks": [
                         {
                             "tool": "SIZE",
@@ -148,6 +151,8 @@ CrossBuild includes every .c, .cpp, .cc and .s files from your project by defaul
 
 The `"flags"` section defines the build flags for every source type. A name starting the an underscore is a private entry used for inheritance (similarly for the configuration names). In any flags section you can include any other section with this special property format: `${inherit:NAME}`. Duplicate entries are NOT filtered.
 
+The optional `"extraLinkerFlags"` section defines linker flags that should be added to the linker command after the object file list. This allows for precise control of the order of the linked libraries.
+
 In the optional `"postBuildTasks"` section you can specify commands to run after a successful build. A `"tool"` from the toolchains definitions or a `"command"` parameter can be used togerther with the `"args"` array to invoke the command. There is a special `${productFile}` parameter availabel in this section that contains the relative path to the target product binary.
 
 ## Building with CrossBuild
@@ -193,6 +198,10 @@ This extension contributes the following settings:
 * No error messages on misconfigured config file
 
 ## Release Notes
+
+### 0.1.8
+* Variables in the default project config file does not get incorrectly substituted anymore
+* Added the `extraLinkerFlags` configuration option
 
 ### 0.1.7
 * Build script now follows symlinks while building file list

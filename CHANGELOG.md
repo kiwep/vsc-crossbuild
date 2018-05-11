@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.1.8]
+* Variables in the default project config file does not get incorrectly substituted anymore
+* Added the `extraLinkerFlags` configuration option
+
 ## [0.1.7]
 * Fixed: build script now follows symlinks while building file list
 

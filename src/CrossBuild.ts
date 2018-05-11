@@ -286,10 +286,6 @@ export class CrossBuild implements vscode.Disposable {
         template = await helper.readFileContent(templatePath);
       }
       catch (e) { console.error(e.stack); return; }
-      template = helper.substituteParams(template, {
-        projectDirName: vscode.workspace.rootPath.split(path.sep).pop(),
-        workspaceRoot: vscode.workspace.rootPath
-      });
       await helper.writeFileContent(this.buildConfig.configFilePath, template);
     }
 

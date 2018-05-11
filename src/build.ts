@@ -9,7 +9,6 @@ import { spawn } from 'child_process';
 
 import { BuildConfig } from './BuildConfig';
 import { IBuildConfig, IUserTaskDefinition, ITargetPickItem } from './interface';
-import { NinjaGenerator } from './NinjaGenerator';
 
 import * as program from 'commander';
 
@@ -132,6 +131,7 @@ async function run() {
       toolBins[toolName] = toolPath;
       const isC = toolName === 'CC' || toolName == 'CXX';
       const isAS = toolName === 'AS';
+      const isLD = toolName === 'LD';
       const flagsName = toolName.toLowerCase() + '_flags';
       const targetFlags: string[] = typeof targetConfig.flags === 'object' && Array.isArray(targetConfig.flags[toolName]) ? targetConfig.flags[toolName] : [];
       const flagsArr = [targetFlags.join(NINLN)];
@@ -139,14 +139,20 @@ async function run() {
       if (isC) flagsArr.push(includes);
       const flags = flagsArr.join(NINLN);
       let mapParams = '';
+      let extraParams = '';
       outStream.write(`${flagsName} = ${flags}\n\n`);
+      if (isLD && Array.isArray(targetConfig.extraLinkerFlags) && targetConfig.extraLinkerFlags.length > 0) {
+        const extraFlags = targetConfig.extraLinkerFlags.join(NINLN);
+        outStream.write(`ld_extra_flags = ${extraFlags}\n\n`);
+        extraParams = ' $ld_extra_flags'
+      }
       outStream.write(`rule ${toolName}\n`);
       if (isC) {
         mapParams = ' -MMD -MF $out.d -c';
         outStream.write(`  depfile = $out.d\n`);
         outStream.write('  deps = gcc\n');
       }
-      outStream.write(`  command = ${toolPath} $${flagsName}${mapParams} -o $out $in\n\n`);
+      outStream.write(`  command = ${toolPath} $${flagsName}${mapParams} $in${extraParams} -o $out\n\n`);
     }
   });
 
